@@ -1,0 +1,89 @@
+{
+  "marketplaces": {
+    "apify": {
+      "enabled": true,
+      "api_base": "https://api.apify.com/v2",
+      "store_url": "https://apify.com/store",
+      "scrape_categories": ["mcp", "scraping", "automation", "ai"]
+    },
+    "smithery": {
+      "enabled": true,
+      "url": "https://smithery.ai",
+      "registry_url": "https://smithery.ai/registry"
+    },
+    "mcp_registry": {
+      "enabled": true,
+      "github_repo": "modelcontextprotocol/servers"
+    },
+    "npm": {
+      "enabled": false,
+      "search_query": "mcp server"
+    }
+  },
+  "validation": {
+    "subreddits": [
+      "SideProject",
+      "EntrepreneurRideAlong",
+      "nocode",
+      "AutomateYourself",
+      "ClaudeAI",
+      "ChatGPT",
+      "webdev",
+      "developers",
+      "SaaS",
+      "smallbusiness"
+    ],
+    "days_back": 14,
+    "min_validation_score": 6.0
+  },
+  "phase_weights": {
+    "casual": {
+      "description": "Lower competition, simpler builds, obvious pain points",
+      "competition_penalty": 0.3,
+      "complexity_bonus": 0.0,
+      "fit_weight": 0.1
+    },
+    "regular": {
+      "description": "Balanced approach for moderate complexity",
+      "competition_penalty": 0.2,
+      "complexity_bonus": 0.15,
+      "fit_weight": 0.15
+    },
+    "power": {
+      "description": "Higher complexity, defensible moats, premium pricing",
+      "competition_penalty": 0.1,
+      "complexity_bonus": 0.3,
+      "fit_weight": 0.25
+    }
+  },
+  "scoring": {
+    "opportunity_weights": {
+      "sentiment": 0.25,
+      "staleness": 0.15,
+      "price_value": 0.15,
+      "promise_delta": 0.20,
+      "competition": 0.10,
+      "fit": 0.15
+    },
+    "validation_weights": {
+      "frequency": 0.30,
+      "intensity": 0.25,
+      "willingness_to_pay": 0.30,
+      "recency": 0.15
+    }
+  },
+  "qa": {
+    "min_pass_rate": 0.90,
+    "test_iterations": 75,
+    "timeout_seconds": 300
+  },
+  "publishing": {
+    "apify_token_env": "APIFY_TOKEN",
+    "dry_run_default": true,
+    "auto_submit_marketing": false
+  },
+  "outputs": {
+    "base_dir": "./outputs",
+    "timestamp_format": "YYYY-MM-DD"
+  }
+}

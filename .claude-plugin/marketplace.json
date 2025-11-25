@@ -4,5 +4,12 @@
     "name": "Jesse Henson",
     "url": "https://github.com/JesseHenson"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "mcp-opportunity-pipeline",
+      "source": "./plugins/mcp-opportunity-pipeline",
+      "description": "Pipeline for discovering, validating, building, and publishing MCP servers to monetization marketplaces (Apify, Smithery, etc.)",
+      "version": "0.1.0"
+    }
+  ]
 }

@@ -17,3 +17,13 @@ __pycache__/
 
 # Node
 node_modules/
+
+# Pipeline outputs (keep .gitkeep files)
+plugins/*/outputs/**/*.json
+plugins/*/outputs/**/*.md
+plugins/*/outputs/build/*/
+plugins/*/outputs/package/*/
+
+# But keep the directory structure
+!plugins/*/outputs/.gitkeep
+!plugins/*/outputs/*/.gitkeep

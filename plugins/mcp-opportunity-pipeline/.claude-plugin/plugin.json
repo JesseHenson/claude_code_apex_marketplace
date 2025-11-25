@@ -1,0 +1,11 @@
+{
+  "name": "mcp-opportunity-pipeline",
+  "version": "0.1.0",
+  "description": "End-to-end pipeline for discovering, validating, building, and publishing MCP servers to monetization marketplaces",
+  "author": {
+    "name": "Jesse Henson",
+    "url": "https://github.com/JesseHenson"
+  },
+  "keywords": ["mcp", "apify", "smithery", "marketplace", "scraping", "monetization", "automation"],
+  "license": "UNLICENSED"
+}

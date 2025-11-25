@@ -1,53 +1,88 @@
 ---
-description: Run full pipeline from discovery to publish (or specified stages)
+description: Run pipeline phases - ideate (idea→spec), build (build→package), or ship (publish)
 ---
 
-# Full Pipeline Run
+# Pipeline Runner
 
-Execute the MCP opportunity pipeline end-to-end or between specified stages.
+Execute pipeline phases or custom stage ranges.
 
 ## Parameters
 
 Parse from user input:
 - `--phase`: casual | regular | power (default: casual)
 - `--target`: apify | smithery | npm (default: apify)
-- `--from`: Starting stage (default: discover)
-- `--to`: Ending stage (default: publish)
+- `--run`: ideate | build | ship | full (default: full)
+- `--from`: Custom starting stage (overrides --run)
+- `--to`: Custom ending stage (overrides --run)
+- `--name`: Spec/build name (required for build/ship phases)
 - `--dry-run`: Skip actual publishing (default: true)
 
-## Stages
+## Pipeline Phases
 
-| Stage | Command | Description |
-|-------|---------|-------------|
-| 1 | discover | Scrape marketplaces |
-| 2 | analyze-gaps | Score opportunities |
-| 3 | validate | Reddit pain validation |
-| 4 | spec | Generate build specs |
-| 5 | build | Implement MCP server |
-| 6 | qa | Automated testing |
-| 7 | package | Generate docs/marketing |
-| 8 | publish | Deploy to marketplace |
+### IDEATE Phase (idea → spec)
+**Command:** `/mcp-opportunity-pipeline:run --run ideate`
+
+Runs: discover → analyze-gaps → validate → spec
+
+Output: Validated opportunity specs ready to build
+
+### BUILD Phase (build → package)
+**Command:** `/mcp-opportunity-pipeline:run --run build --name {spec-name}`
+
+Runs: build → qa → package
+
+Output: Tested code + docs + marketing materials
+
+### SHIP Phase (publish)
+**Command:** `/mcp-opportunity-pipeline:run --run ship --name {build-name}`
+
+Runs: publish (with dry-run by default)
+
+Output: Live marketplace listing
+
+### FULL Pipeline
+**Command:** `/mcp-opportunity-pipeline:run --run full`
+
+Runs all 8 stages sequentially with approval gates.
+
+## Stage Reference
+
+| # | Stage | Phase | Command | Description |
+|---|-------|-------|---------|-------------|
+| 1 | discover | IDEATE | discover | Scrape marketplaces |
+| 2 | analyze-gaps | IDEATE | analyze-gaps | Score opportunities |
+| 3 | validate | IDEATE | validate | Reddit pain validation |
+| 4 | spec | IDEATE | spec | Generate build specs |
+| 5 | build | BUILD | build | Implement MCP server |
+| 6 | qa | BUILD | qa | Automated testing |
+| 7 | package | BUILD | package | Generate docs/marketing |
+| 8 | publish | SHIP | publish | Deploy to marketplace |
 
 ## Usage Examples
 
-### Full pipeline (discovery to publish)
+### Ideation: Find and spec opportunities
 ```
-/mcp-pipeline:run --phase casual --target apify
-```
-
-### Discovery and analysis only
-```
-/mcp-pipeline:run --from discover --to analyze-gaps
+/mcp-opportunity-pipeline:run --run ideate --phase casual
 ```
 
-### Build from existing spec
+### Build: Implement a specific spec
 ```
-/mcp-pipeline:run --from build --to publish --dry-run
+/mcp-opportunity-pipeline:run --run build --name notion-database-sync
 ```
 
-### Validate and spec only
+### Ship: Publish to Apify
 ```
-/mcp-pipeline:run --from validate --to spec
+/mcp-opportunity-pipeline:run --run ship --name notion-database-sync --dry-run false
+```
+
+### Custom range: Just validate and spec
+```
+/mcp-opportunity-pipeline:run --from validate --to spec
+```
+
+### Full pipeline with stops
+```
+/mcp-opportunity-pipeline:run --run full --phase casual --target apify
 ```
 
 ## Process

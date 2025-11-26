@@ -59,6 +59,14 @@ Use the `spec-generator` agent to:
       - Revenue targets
       - Timeline
 
+   g. **Walkthrough: Reproducing the Problem**
+      - Step-by-step setup of the current tool/competitor
+      - How to create test data that exposes the problem
+      - Exact reproduction steps showing the pain point
+      - What the user sees (error, limitation, frustration)
+      - Current workarounds people use
+      - What our solution does differently (before/after)
+
 4. **Save** to `outputs/spec/{name}-spec.md`
 
 ## Output Template
@@ -103,6 +111,39 @@ Use the `spec-generator` agent to:
 ## Success Metrics
 - Target: {users} active users in {timeframe}
 - Target: {events}/month = ${revenue}/month net
+
+---
+
+## Walkthrough: Reproducing the {Problem}
+
+### Step 1: Set Up the Current Tool/Competitor
+- How to install/configure the existing solution
+- Authentication and basic setup
+- Verify it works
+
+### Step 2: Create Test Data
+- How to create data that exposes the limitation
+- Minimum viable dataset to reproduce
+
+### Step 3: Reproduce the Problem
+- Step-by-step commands/actions
+- What error/limitation occurs
+- Show actual output vs expected output
+
+### Step 4: Current Workarounds
+- How users currently work around this
+- Why workarounds are painful
+
+### Step 5: What Our Solution Does Differently
+- Same scenario with our tool
+- Before/after comparison
+- Code example if applicable
+
+---
+
+## References
+- Validation evidence: `outputs/validate/validated-opportunities-{date}.json`
+- API docs: {relevant_api_docs}
 ```
 
 ## Next Step

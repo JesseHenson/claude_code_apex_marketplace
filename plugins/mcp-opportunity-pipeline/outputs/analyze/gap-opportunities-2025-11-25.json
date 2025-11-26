@@ -1,0 +1,244 @@
+{
+  "analyzed_at": "2025-11-25T16:30:00Z",
+  "phase": "casual",
+  "input_items": 38,
+  "analyzed_items": 38,
+  "scoring_weights": {
+    "sentiment": 0.25,
+    "staleness": 0.15,
+    "price_value": 0.15,
+    "promise_delta": 0.20,
+    "competition": 0.10,
+    "fit": 0.15
+  },
+  "opportunities": [
+    {
+      "rank": 1,
+      "name": "Notion Database Sync MCP",
+      "marketplace": "gap",
+      "category": ["database", "productivity", "mcp"],
+      "opportunity_score": 82,
+      "scores": {
+        "sentiment": 8,
+        "staleness": 9,
+        "price_value": 7,
+        "promise_delta": 8,
+        "competition": 7,
+        "fit": 9
+      },
+      "gap_summary": "No dedicated Notion MCP server exists on Smithery. Existing Apify Notion scrapers are basic, don't handle large databases well. Users complain about rate limits and lack of bidirectional sync.",
+      "differentiation_angle": "Two-way sync with intelligent batching, progress tracking, handles 10k+ rows without timeout. MCP-native for Claude integration.",
+      "existing_solutions": [
+        {"name": "Notion scrapers (Apify)", "weakness": "Read-only, no sync, rate limit issues"},
+        {"name": "Zapier/Make integrations", "weakness": "No MCP, limited batch size"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 2,
+      "name": "LinkedIn Profile Enrichment MCP",
+      "marketplace": "gap",
+      "category": ["lead-generation", "scraping", "mcp"],
+      "opportunity_score": 79,
+      "scores": {
+        "sentiment": 8,
+        "staleness": 7,
+        "price_value": 8,
+        "promise_delta": 8,
+        "competition": 6,
+        "fit": 8
+      },
+      "gap_summary": "No LinkedIn MCP on Smithery. Apify has scrapers but they're expensive, break frequently due to anti-bot, and aren't MCP-native.",
+      "differentiation_angle": "MCP server for Claude-native LinkedIn lookups with caching, rate limit handling, and enrichment from multiple sources.",
+      "existing_solutions": [
+        {"name": "LinkedIn scrapers (Apify)", "weakness": "Expensive, breaks often, not MCP"},
+        {"name": "PhantomBuster", "weakness": "No MCP integration"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 3,
+      "name": "Airtable Advanced Sync MCP",
+      "marketplace": "smithery",
+      "category": ["database", "productivity"],
+      "opportunity_score": 76,
+      "scores": {
+        "sentiment": 7,
+        "staleness": 6,
+        "price_value": 7,
+        "promise_delta": 8,
+        "competition": 5,
+        "fit": 8
+      },
+      "gap_summary": "Smithery has basic Airtable MCP (588 uses) but users want more: formula support, linked record handling, attachment management, bulk operations.",
+      "differentiation_angle": "Enhanced Airtable MCP with formula evaluation, linked record resolution, attachment upload/download, and batch operations up to 10k records.",
+      "existing_solutions": [
+        {"name": "Smithery Airtable", "weakness": "Basic CRUD only, no formulas, no attachments"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 4,
+      "name": "Multi-Platform Social Scheduler MCP",
+      "marketplace": "gap",
+      "category": ["social-media", "automation", "mcp"],
+      "opportunity_score": 74,
+      "scores": {
+        "sentiment": 7,
+        "staleness": 5,
+        "price_value": 8,
+        "promise_delta": 7,
+        "competition": 5,
+        "fit": 9
+      },
+      "gap_summary": "Individual platform MCPs exist (Instagram 103 uses, YouTube 30 uses) but no unified scheduler. Users want to post to multiple platforms from Claude.",
+      "differentiation_angle": "Single MCP to schedule/post to Twitter, LinkedIn, Instagram, YouTube, TikTok with unified content adaptation per platform.",
+      "existing_solutions": [
+        {"name": "Individual platform MCPs", "weakness": "Fragmented, no scheduling"},
+        {"name": "Buffer/Hootsuite", "weakness": "No MCP integration"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 5,
+      "name": "Job Board Aggregator MCP",
+      "marketplace": "gap",
+      "category": ["jobs", "lead-generation", "mcp"],
+      "opportunity_score": 73,
+      "scores": {
+        "sentiment": 7,
+        "staleness": 6,
+        "price_value": 8,
+        "promise_delta": 7,
+        "competition": 6,
+        "fit": 7
+      },
+      "gap_summary": "Apify has Job Posting API but it's not MCP-native. No job aggregator MCP on Smithery for recruiters using Claude.",
+      "differentiation_angle": "MCP server aggregating Indeed, LinkedIn, Greenhouse, Lever job postings with filtering, deduplication, and application tracking.",
+      "existing_solutions": [
+        {"name": "Job Posting API (Apify)", "weakness": "Not MCP, expensive"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 6,
+      "name": "Google Workspace Super MCP",
+      "marketplace": "smithery",
+      "category": ["productivity", "platform-apis"],
+      "opportunity_score": 71,
+      "scores": {
+        "sentiment": 6,
+        "staleness": 5,
+        "price_value": 6,
+        "promise_delta": 7,
+        "competition": 4,
+        "fit": 8
+      },
+      "gap_summary": "Smithery has separate Gmail (965), Drive (132), Calendar (129), Sheets (11) MCPs. Users want unified workspace operations.",
+      "differentiation_angle": "Already exists as 'Google Super' (6 uses) but low adoption suggests UX issues. Opportunity to do it better with cross-service workflows.",
+      "existing_solutions": [
+        {"name": "Google Super (Smithery)", "weakness": "Only 6 uses, likely UX/reliability issues"},
+        {"name": "Individual Google MCPs", "weakness": "Fragmented"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 7,
+      "name": "E-commerce Product Monitor MCP",
+      "marketplace": "gap",
+      "category": ["scraping", "automation", "mcp"],
+      "opportunity_score": 70,
+      "scores": {
+        "sentiment": 7,
+        "staleness": 5,
+        "price_value": 7,
+        "promise_delta": 6,
+        "competition": 5,
+        "fit": 7
+      },
+      "gap_summary": "Apify has e-commerce scrapers but no MCP for Claude-native price monitoring, stock alerts, competitor tracking.",
+      "differentiation_angle": "MCP server for monitoring Amazon, eBay, Shopify prices with alerts, price history, and restock notifications.",
+      "existing_solutions": [
+        {"name": "E-commerce scrapers (Apify)", "weakness": "Not MCP, manual trigger"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 8,
+      "name": "Research Paper Assistant MCP",
+      "marketplace": "gap",
+      "category": ["ai", "research", "mcp"],
+      "opportunity_score": 69,
+      "scores": {
+        "sentiment": 6,
+        "staleness": 7,
+        "price_value": 5,
+        "promise_delta": 7,
+        "competition": 7,
+        "fit": 9
+      },
+      "gap_summary": "No academic research MCP. Users want to search arXiv, Semantic Scholar, Google Scholar from Claude and get structured paper data.",
+      "differentiation_angle": "MCP for academic research: search papers, extract citations, get PDFs, summarize findings, track citations.",
+      "existing_solutions": [
+        {"name": "Exa Search", "weakness": "General web, not academic-focused"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 9,
+      "name": "CRM Sync MCP (HubSpot/Salesforce)",
+      "marketplace": "gap",
+      "category": ["crm", "lead-generation", "mcp"],
+      "opportunity_score": 68,
+      "scores": {
+        "sentiment": 6,
+        "staleness": 5,
+        "price_value": 7,
+        "promise_delta": 6,
+        "competition": 4,
+        "fit": 8
+      },
+      "gap_summary": "No HubSpot or Salesforce MCP on Smithery. Only Attio (58 uses) for CRM. Huge market for enterprise CRM integration.",
+      "differentiation_angle": "MCP for HubSpot/Salesforce with contact lookup, deal updates, activity logging, pipeline queries.",
+      "existing_solutions": [
+        {"name": "Attio MCP", "weakness": "Niche CRM, not HubSpot/Salesforce"}
+      ],
+      "target_marketplace": "smithery"
+    },
+    {
+      "rank": 10,
+      "name": "Website Content Crawler Enhanced",
+      "marketplace": "apify",
+      "category": ["ai", "scraping", "llm"],
+      "opportunity_score": 65,
+      "scores": {
+        "sentiment": 6,
+        "staleness": 4,
+        "price_value": 8,
+        "promise_delta": 6,
+        "competition": 3,
+        "fit": 7
+      },
+      "gap_summary": "Apify's Website Content Crawler is free with 4.45 rating, 21M runs. Room for premium version with better JS rendering, structured extraction, and RAG-optimized output.",
+      "differentiation_angle": "Premium crawler with dynamic JS rendering, schema.org extraction, chunking for RAG, and citation-ready output.",
+      "existing_solutions": [
+        {"name": "Website Content Crawler (Apify)", "weakness": "Basic Markdown, no JS rendering"}
+      ],
+      "target_marketplace": "apify"
+    }
+  ],
+  "summary": {
+    "top_categories": ["mcp", "database", "lead-generation", "social-media"],
+    "biggest_gaps": [
+      "No Notion MCP on Smithery",
+      "No LinkedIn MCP anywhere",
+      "Fragmented Google Workspace MCPs",
+      "No CRM (HubSpot/Salesforce) MCP"
+    ],
+    "recommended_for_casual_phase": [
+      "Notion Database Sync MCP",
+      "LinkedIn Profile Enrichment MCP",
+      "Airtable Advanced Sync MCP"
+    ]
+  }
+}

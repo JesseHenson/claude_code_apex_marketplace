@@ -1,0 +1,463 @@
+{
+  "discovery_run": {
+    "scraped_at": "2025-11-25T16:00:00Z",
+    "phase": "casual",
+    "marketplaces_scraped": ["apify", "smithery", "mcp_registry"]
+  },
+  "marketplaces": {
+    "apify": {
+      "marketplace": "apify",
+      "scraped_at": "2025-11-25T16:00:00Z",
+      "source_url": "https://apify.com/store",
+      "items": [
+        {
+          "name": "Instagram Scraper",
+          "author": "apify",
+          "description": "Extract Instagram posts, profiles, places, hashtags, photos, and comments using URLs or search queries.",
+          "category": ["social-media", "scraping"],
+          "url": "https://apify.com/apify/instagram-scraper",
+          "price_model": "pay-per-event",
+          "price_details": "$0.0027-$0.0005 per dataset item",
+          "rating": 4.58,
+          "review_count": 216,
+          "total_runs": 73393115,
+          "total_users": 150110,
+          "last_updated": null
+        },
+        {
+          "name": "Google Maps Scraper",
+          "author": "compass",
+          "description": "Extract data from Google Maps locations including reviews, contact info, images, and business details.",
+          "category": ["maps", "scraping", "lead-generation"],
+          "url": "https://apify.com/compass/google-maps-scraper",
+          "price_model": "pay-per-event",
+          "price_details": "Multiple pricing tiers",
+          "rating": 4.76,
+          "review_count": 539,
+          "total_runs": 15354481,
+          "total_users": 209473,
+          "last_updated": null
+        },
+        {
+          "name": "Website Content Crawler",
+          "author": "apify",
+          "description": "Crawl websites and extract text content with Markdown formatting for AI models and LLM applications.",
+          "category": ["ai", "scraping", "llm"],
+          "url": "https://apify.com/apify/website-content-crawler",
+          "price_model": "free",
+          "price_details": null,
+          "rating": 4.45,
+          "review_count": 122,
+          "total_runs": 21942109,
+          "total_users": 88007,
+          "last_updated": null
+        },
+        {
+          "name": "YouTube Scraper",
+          "author": "streamers",
+          "description": "YouTube crawler providing channel data including views, subscribers, and likes without API limits.",
+          "category": ["social-media", "scraping", "video"],
+          "url": "https://apify.com/streamers/youtube-scraper",
+          "price_model": "pay-per-event",
+          "price_details": "$0.005 per video",
+          "rating": 4.60,
+          "review_count": 80,
+          "total_runs": 8878362,
+          "total_users": 42244,
+          "last_updated": null
+        },
+        {
+          "name": "TikTok Scraper",
+          "author": "clockworks",
+          "description": "Extract TikTok videos, hashtags, and user data using URLs or search queries with optional video downloads.",
+          "category": ["social-media", "scraping", "video"],
+          "url": "https://apify.com/clockworks/tiktok-scraper",
+          "price_model": "pay-per-event",
+          "price_details": "Tiered pricing",
+          "rating": 4.68,
+          "review_count": 120,
+          "total_runs": 53265336,
+          "total_users": 95812,
+          "last_updated": null
+        },
+        {
+          "name": "Twitter Scraper Unlimited",
+          "author": "unknown",
+          "description": "Enterprise-grade Twitter data extraction with transparent event-based pricing for both small and large scale.",
+          "category": ["social-media", "scraping"],
+          "url": "https://apify.com/store",
+          "price_model": "pay-per-event",
+          "price_details": "Event-based pricing",
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        },
+        {
+          "name": "Contact Information Extractor",
+          "author": "community",
+          "description": "Extract emails, phone numbers, and social media links from websites - best for lead generation and data enrichment.",
+          "category": ["lead-generation", "scraping"],
+          "url": "https://apify.com/store",
+          "price_model": "unknown",
+          "price_details": null,
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        },
+        {
+          "name": "Reddit Scraper Unlimited",
+          "author": "community",
+          "description": "Crawl posts, comments, communities, and users without login.",
+          "category": ["social-media", "scraping"],
+          "url": "https://apify.com/store",
+          "price_model": "unknown",
+          "price_details": null,
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        },
+        {
+          "name": "AI Browser Agent",
+          "author": "apify",
+          "description": "Open-source AI-powered browser automation based on Browser Use, hosted on Apify. Run tasks using LLMs like ChatGPT, Claude.",
+          "category": ["ai", "automation", "agents"],
+          "url": "https://apify.com/store/collections/ai-agents",
+          "price_model": "unknown",
+          "price_details": null,
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        },
+        {
+          "name": "Dynamic Web Scraper",
+          "author": "apify",
+          "description": "Gathers information online by simulating user browsing behavior. Uses ChatGPT for browser navigation decisions.",
+          "category": ["ai", "scraping"],
+          "url": "https://apify.com/store",
+          "price_model": "unknown",
+          "price_details": null,
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        },
+        {
+          "name": "Job Posting API",
+          "author": "unknown",
+          "description": "High-quality real jobs from 105k+ company career sites across 35 ATS platforms, enriched with AI and LinkedIn data.",
+          "category": ["jobs", "api", "lead-generation"],
+          "url": "https://apify.com/store/categories/jobs",
+          "price_model": "unknown",
+          "price_details": null,
+          "rating": null,
+          "review_count": null,
+          "total_runs": null,
+          "total_users": null,
+          "last_updated": null
+        }
+      ]
+    },
+    "smithery": {
+      "marketplace": "smithery",
+      "scraped_at": "2025-11-25T16:00:00Z",
+      "source_url": "https://smithery.ai/servers",
+      "items": [
+        {
+          "name": "Exa Search",
+          "qualified_name": "exa",
+          "description": "Fast, intelligent web search and web crawling with Exa-code tool for coding agents",
+          "category": ["Platform APIs", "Developer Tools"],
+          "url": "https://smithery.ai/server/exa",
+          "price_model": "remote",
+          "use_count": 758697,
+          "verified": true,
+          "homepage": "https://exa.ai"
+        },
+        {
+          "name": "Linkup",
+          "qualified_name": "@LinkupPlatform/linkup-mcp-server",
+          "description": "Real-time web search providing trustworthy, sourced answers with facts and citations",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/@LinkupPlatform/linkup-mcp-server",
+          "price_model": "remote",
+          "use_count": 3621,
+          "verified": true,
+          "homepage": "https://github.com/LinkupPlatform/linkup-mcp-server"
+        },
+        {
+          "name": "Gmail",
+          "qualified_name": "gmail",
+          "description": "Email management including composition, search, organization, and automation features",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/gmail",
+          "price_model": "remote",
+          "use_count": 965,
+          "verified": true
+        },
+        {
+          "name": "Airtable",
+          "qualified_name": "airtable",
+          "description": "Spreadsheet-database hybrid for project organization and team collaboration",
+          "category": ["Database"],
+          "url": "https://smithery.ai/server/airtable",
+          "price_model": "remote",
+          "use_count": 588,
+          "verified": true
+        },
+        {
+          "name": "Bright Data",
+          "qualified_name": "@luminati-io/brightdata-mcp",
+          "description": "Web search, crawling, and data extraction without blocking restrictions",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/@luminati-io/brightdata-mcp",
+          "price_model": "remote",
+          "use_count": 460,
+          "verified": true,
+          "author": "Luminati"
+        },
+        {
+          "name": "Clickup",
+          "qualified_name": "clickup",
+          "description": "Unified platform combining tasks, docs, goals, and chat for team collaboration",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/clickup",
+          "price_model": "remote",
+          "use_count": 236,
+          "verified": true
+        },
+        {
+          "name": "Todoist",
+          "qualified_name": "todoist",
+          "description": "Task management tool with to-do lists, deadlines, and cross-platform syncing",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/todoist",
+          "price_model": "remote",
+          "use_count": 143,
+          "verified": true
+        },
+        {
+          "name": "Google Drive",
+          "qualified_name": "googledrive",
+          "description": "Cloud storage solution for uploading, sharing, and collaborating on files",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/googledrive",
+          "price_model": "remote",
+          "use_count": 132,
+          "verified": true
+        },
+        {
+          "name": "Google Calendar",
+          "qualified_name": "googlecalendar",
+          "description": "Scheduling tool with event reminders and integration with email and other apps",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/googlecalendar",
+          "price_model": "remote",
+          "use_count": 129,
+          "verified": true
+        },
+        {
+          "name": "Reddit",
+          "qualified_name": "reddit",
+          "description": "Social news platform with user communities for content sharing and discussions",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/reddit",
+          "price_model": "remote",
+          "use_count": 125,
+          "verified": true
+        },
+        {
+          "name": "Instagram",
+          "qualified_name": "instagram",
+          "description": "Social platform for sharing photos and videos (Business and Creator accounts only)",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/instagram",
+          "price_model": "remote",
+          "use_count": 103,
+          "verified": true
+        },
+        {
+          "name": "Asana",
+          "qualified_name": "asana",
+          "description": "Team workspace for organizing, tracking, and managing work collaboratively",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/asana",
+          "price_model": "remote",
+          "use_count": 79,
+          "verified": true
+        },
+        {
+          "name": "GitHub",
+          "qualified_name": "github",
+          "description": "Code hosting platform with version control, repository management, and CI/CD features",
+          "category": ["Agentic Tools"],
+          "url": "https://smithery.ai/server/github",
+          "price_model": "remote",
+          "use_count": 58,
+          "verified": true
+        },
+        {
+          "name": "Attio",
+          "qualified_name": "attio",
+          "description": "Customizable workspace for team relationships and workflow management",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/attio",
+          "price_model": "remote",
+          "use_count": 58,
+          "verified": true
+        },
+        {
+          "name": "Slack",
+          "qualified_name": "slack",
+          "description": "Channel-based messaging enabling team collaboration and tool integration",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/slack",
+          "price_model": "remote",
+          "use_count": 47,
+          "verified": true
+        },
+        {
+          "name": "Youtube",
+          "qualified_name": "youtube",
+          "description": "Video-sharing platform with user content, live streaming, and monetization options",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/youtube",
+          "price_model": "remote",
+          "use_count": 30,
+          "verified": true
+        },
+        {
+          "name": "Canva",
+          "qualified_name": "canva",
+          "description": "Drag-and-drop design suite with templates for graphics and marketing materials",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/canva",
+          "price_model": "remote",
+          "use_count": 29,
+          "verified": true
+        },
+        {
+          "name": "Harvest",
+          "qualified_name": "harvest",
+          "description": "Time-tracking and invoicing tool for logging billable hours and managing payments",
+          "category": ["Developer Tools"],
+          "url": "https://smithery.ai/server/harvest",
+          "price_model": "remote",
+          "use_count": 18,
+          "verified": true
+        },
+        {
+          "name": "Google Sheets",
+          "qualified_name": "googlesheets",
+          "description": "Cloud-based spreadsheet enabling collaboration, analysis, and Google Workspace integration",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/googlesheets",
+          "price_model": "remote",
+          "use_count": 11,
+          "verified": true
+        },
+        {
+          "name": "Outlook",
+          "qualified_name": "outlook",
+          "description": "Microsoft's email and calendar platform with contacts and scheduling integration",
+          "category": ["Platform APIs"],
+          "url": "https://smithery.ai/server/outlook",
+          "price_model": "remote",
+          "use_count": 9,
+          "verified": true
+        }
+      ]
+    },
+    "mcp_registry": {
+      "marketplace": "mcp_registry",
+      "scraped_at": "2025-11-25T16:00:00Z",
+      "source_url": "https://github.com/modelcontextprotocol/servers",
+      "items": [
+        {
+          "name": "Everything",
+          "description": "Reference/test server with prompts, resources, and tools",
+          "category": ["Reference"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Fetch",
+          "description": "Web content fetching and conversion for efficient LLM usage",
+          "category": ["Web"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Filesystem",
+          "description": "Secure file operations with configurable access controls",
+          "category": ["File Management"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Git",
+          "description": "Tools to read, search, and manipulate Git repositories",
+          "category": ["Version Control"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Memory",
+          "description": "Knowledge graph-based persistent memory system",
+          "category": ["Data Management"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Sequential Thinking",
+          "description": "Dynamic and reflective problem-solving through thought sequences",
+          "category": ["AI"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+          "price_model": "free",
+          "author": "anthropic"
+        },
+        {
+          "name": "Time",
+          "description": "Time and timezone conversion capabilities",
+          "category": ["Utilities"],
+          "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+          "price_model": "free",
+          "author": "anthropic"
+        }
+      ],
+      "note": "100+ third-party integrations available including AWS, Azure, Atlassian, Brave Search, GitHub, GitLab, Google Drive, and specialized enterprise services."
+    }
+  },
+  "summary": {
+    "total_items": 38,
+    "by_marketplace": {
+      "apify": 11,
+      "smithery": 20,
+      "mcp_registry": 7
+    },
+    "categories_found": [
+      "social-media",
+      "scraping",
+      "ai",
+      "automation",
+      "lead-generation",
+      "Platform APIs",
+      "Developer Tools",
+      "Database",
+      "Agentic Tools"
+    ]
+  }
+}

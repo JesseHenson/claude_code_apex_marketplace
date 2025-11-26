@@ -1,0 +1,77 @@
+{
+  "run_at": "2025-11-25T17:30:00Z",
+  "phase": "casual",
+  "target_marketplace": "smithery",
+  "stages_run": ["discover", "analyze-gaps", "validate", "spec"],
+  "stages_completed": ["discover", "analyze-gaps", "validate", "spec"],
+  "stages_failed": [],
+  "outputs": {
+    "discover": "outputs/discover/raw-opportunities-2025-11-25.json",
+    "analyze": "outputs/analyze/gap-opportunities-2025-11-25.json",
+    "validate": "outputs/validate/validated-opportunities-2025-11-25.json",
+    "specs": [
+      "outputs/spec/notion-database-sync-mcp-spec.md",
+      "outputs/spec/linkedin-enrichment-mcp-spec.md",
+      "outputs/spec/airtable-advanced-mcp-spec.md"
+    ]
+  },
+  "summary": {
+    "items_discovered": 38,
+    "items_analyzed": 38,
+    "opportunities_scored": 10,
+    "opportunities_validated": 3,
+    "specs_generated": 3
+  },
+  "top_opportunities": [
+    {
+      "rank": 1,
+      "name": "Notion Database Sync MCP",
+      "opportunity_score": 82,
+      "validation_score": 8.2,
+      "spec_file": "outputs/spec/notion-database-sync-mcp-spec.md",
+      "target": "smithery",
+      "estimated_monthly_revenue": "$500",
+      "build_complexity": "medium",
+      "recommendation": "PROCEED - Best fit for casual phase. Clear pain point, proven WTP, no MCP competition."
+    },
+    {
+      "rank": 2,
+      "name": "LinkedIn Profile Enrichment MCP",
+      "opportunity_score": 79,
+      "validation_score": 7.5,
+      "spec_file": "outputs/spec/linkedin-enrichment-mcp-spec.md",
+      "target": "smithery",
+      "estimated_monthly_revenue": "$500",
+      "build_complexity": "medium-high",
+      "recommendation": "CONSIDER - Higher WTP but legal/compliance risks. Depends on Proxycurl reliability."
+    },
+    {
+      "rank": 3,
+      "name": "Airtable Advanced Sync MCP",
+      "opportunity_score": 76,
+      "validation_score": 7.1,
+      "spec_file": "outputs/spec/airtable-advanced-mcp-spec.md",
+      "target": "smithery",
+      "estimated_monthly_revenue": "$300",
+      "build_complexity": "medium",
+      "recommendation": "BACKUP - Good opportunity but existing MCP has some traction. Differentiate on features."
+    }
+  ],
+  "next_steps": [
+    {
+      "action": "Build Notion Database Sync MCP",
+      "command": "/mcp-opportunity-pipeline:make --name notion-database-sync-mcp",
+      "priority": "high"
+    },
+    {
+      "action": "Review LinkedIn spec for compliance approach",
+      "command": "Read outputs/spec/linkedin-enrichment-mcp-spec.md",
+      "priority": "medium"
+    },
+    {
+      "action": "Monitor Smithery Airtable MCP for feature gaps",
+      "command": "Manual review",
+      "priority": "low"
+    }
+  ]
+}

@@ -1,77 +1,141 @@
 ---
-description: Run ideation phase (discover → analyze-gaps → validate → walkthrough → spec)
+description: Run ideation phase (discover → analyze-gaps → validate → pre-check)
 ---
 
 # IDEATE Phase
 
-Run the full ideation pipeline: discover opportunities, analyze gaps, validate against Reddit, walk through the user experience, and generate specs.
+Run the ideation pipeline: discover opportunities, analyze gaps, validate demand, and pre-check feasibility.
+
+**Output:** Validated opportunities with feasibility assessment, ready for REFINE phase.
+
+## Pipeline Position
+
+```
+[IDEATE] → REFINE → MAKE → SHIP
+    │
+    ├── discover      → Raw opportunities from marketplaces
+    ├── analyze-gaps  → Scored and ranked
+    ├── validate      → Reddit/web pain signal confirmation
+    └── pre-check     → Feasibility critique (APIs, legal, costs)
+                        → DECISION: proceed / pivot / kill
+```
 
 ## Parameters
 
 - `--phase`: casual | regular | power (default: casual)
 - `--marketplaces`: Comma-separated list (default: apify,smithery,mcp_registry)
 - `--days`: Reddit validation lookback (default: 14)
-- `--select`: How many specs to generate (default: top-3)
-- `--skip-walkthrough`: Skip interactive walkthrough (default: false)
+- `--select`: How many to pre-check (default: top-3)
 
 ## Stages Executed
 
-1. **DISCOVER** - Scrape marketplaces for opportunities
-2. **ANALYZE-GAPS** - Score on sentiment, staleness, fit, competition
-3. **VALIDATE** - Check Reddit for real pain signals
-4. **WALKTHROUGH** - Interactively explore the problem/existing tools
-5. **SPEC** - Generate buildable product specifications with concrete walkthroughs
+### 1. DISCOVER
+Scrape marketplaces for opportunities.
+- Output: `outputs/discover/raw-opportunities-{date}.json`
 
-## Process
+### 2. ANALYZE-GAPS
+Score opportunities on sentiment, staleness, competition, fit.
+- Output: `outputs/analyze/gap-opportunities-{date}.json`
 
-Execute stages sequentially, stopping if any stage fails:
+### 3. VALIDATE
+Check Reddit/web for real pain signals.
+- Output: `outputs/validate/validated-opportunities-{date}.json`
+
+### 4. PRE-CHECK
+Feasibility critique for top opportunities:
+- API availability and costs
+- Legal/TOS issues
+- Platform viability
+- Competitive moat
+
+For each opportunity, produces:
+- Output: `outputs/{name}/pre-check.md`
+- Decision: PROCEED | PIVOT | KILL
+
+## Decision Points
+
+After PRE-CHECK, each opportunity gets a decision:
+
+| Decision | Meaning | Next Action |
+|----------|---------|-------------|
+| **PROCEED** | Feasibility confirmed | Move to REFINE phase |
+| **PIVOT** | Blocker found, but alternatives exist | Run pivot analysis |
+| **KILL** | Not viable | Skip, move to next opportunity |
+
+## Output Summary
+
+After ideate completes:
 
 ```
-discover
-    ↓ outputs/discover/raw-opportunities-{date}.json
-analyze-gaps
-    ↓ outputs/analyze/gap-opportunities-{date}.json
-validate
-    ↓ outputs/validate/validated-opportunities-{date}.json
-walkthrough (interactive)
-    ↓ Understanding of actual user pain points
-spec
-    ↓ outputs/spec/{name}-spec.md (with walkthrough sections)
+outputs/
+├── discover/raw-opportunities-{date}.json
+├── analyze/gap-opportunities-{date}.json
+├── validate/validated-opportunities-{date}.json
+├── {opportunity-1}/
+│   └── pre-check.md  (PROCEED)
+├── {opportunity-2}/
+│   └── pre-check.md  (PIVOT - needs new approach)
+├── {opportunity-3}/
+│   └── pre-check.md  (KILL - API dead)
+└── ideate-run-{date}.json
 ```
 
-## Walkthrough Stage
+## Run Summary File
 
-For each validated opportunity, the walkthrough stage will:
+`outputs/ideate-run-{date}.json`:
 
-1. **Identify the current tool/competitor** to test
-2. **Guide setup** of the existing solution
-3. **Reproduce the pain point** step-by-step
-4. **Document findings** for the spec
-
-This is interactive - you'll be asked questions like:
-- "Do you have an Airtable/Notion account to test with?"
-- "Should I guide you through setting up the existing MCP?"
-- "Let's create test data to expose the limitation..."
-
-Use `--skip-walkthrough` to generate specs without this step (walkthroughs will be research-based rather than hands-on).
-
-## Output
-
-After completion:
-- Discovery data in `outputs/discover/`
-- Scored opportunities in `outputs/analyze/`
-- Validated opportunities in `outputs/validate/`
-- Product specs in `outputs/spec/` (with walkthrough sections)
-- Summary in `outputs/ideate-run-{date}.json`
-
-## Next Step
-
-Review generated specs in `outputs/spec/`, then run:
+```json
+{
+  "run_at": "2025-11-28T...",
+  "phase": "casual",
+  "stages_completed": ["discover", "analyze", "validate", "pre-check"],
+  "opportunities_discovered": 38,
+  "opportunities_validated": 10,
+  "pre_check_results": {
+    "proceed": ["notion-database-sync-mcp"],
+    "pivot": ["linkedin-enrichment-mcp"],
+    "kill": []
+  },
+  "next_steps": [
+    {
+      "opportunity": "notion-database-sync-mcp",
+      "action": "refine",
+      "command": "/mcp-opportunity-pipeline:refine --name notion-database-sync-mcp"
+    },
+    {
+      "opportunity": "linkedin-enrichment-mcp",
+      "action": "pivot",
+      "command": "/mcp-opportunity-pipeline:pivot --name linkedin-enrichment-mcp"
+    }
+  ]
+}
 ```
-/mcp-opportunity-pipeline:build --name {spec-name}
+
+## Usage
+
+### Full ideate run
+```
+/mcp-opportunity-pipeline:ideate
 ```
 
-Or run the full build phase:
+### Custom parameters
 ```
-/mcp-opportunity-pipeline:run --run build --name {spec-name}
+/mcp-opportunity-pipeline:ideate --phase regular --select top-5
+```
+
+### Resume from specific stage
+```
+/mcp-opportunity-pipeline:pre-check --all
+```
+
+## Next Phase
+
+For opportunities with PROCEED decision:
+```
+/mcp-opportunity-pipeline:refine --name {opportunity-name}
+```
+
+For opportunities with PIVOT decision:
+```
+/mcp-opportunity-pipeline:pivot --name {opportunity-name}
 ```

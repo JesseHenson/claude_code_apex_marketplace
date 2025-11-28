@@ -67,7 +67,7 @@ Use the `spec-generator` agent to:
       - Current workarounds people use
       - What our solution does differently (before/after)
 
-4. **Save** to `outputs/spec/{name}-spec.md`
+4. **Save** to `outputs/{name}/spec.md`
 
 ## Output Template
 

@@ -48,11 +48,13 @@ Document the gap for the spec:
 
 ## Output
 
-Adds a `## Walkthrough` section to the spec with:
+Saves to `outputs/{name}/walkthrough.md` with:
 - Setup instructions for testing
 - Step-by-step reproduction of the problem
 - Concrete examples with sample data
 - Before/after comparison
+
+Also updates the spec's walkthrough section in `outputs/{name}/spec.md`.
 
 ## Usage Examples
 

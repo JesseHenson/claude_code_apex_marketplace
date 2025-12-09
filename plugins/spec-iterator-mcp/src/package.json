@@ -3,15 +3,10 @@
   "version": "0.1.0",
   "description": "MCP server that transforms rough ideas into complete technical specifications through structured clarification dialogues",
   "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "spec-iterator-mcp": "dist/index.js"
-  },
+  "module": "index.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/index.js",
-    "inspector": "npx @anthropic-ai/mcp-inspector dist/index.js"
+    "build": "npx smithery build",
+    "dev": "npx smithery dev"
   },
   "keywords": [
     "mcp",
@@ -24,11 +19,12 @@
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.52.0",
-    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.17.3",
     "uuid": "^11.0.3",
-    "zod": "^3.24.0"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
+    "@smithery/cli": "^1.4.6",
     "@types/node": "^22.10.0",
     "@types/uuid": "^10.0.0",
     "typescript": "^5.7.0"

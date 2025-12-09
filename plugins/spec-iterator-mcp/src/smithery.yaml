@@ -1,93 +1,21 @@
 # Smithery deployment configuration
-# https://smithery.ai/docs/deployment
+# https://smithery.ai/docs/build/project-config/smithery-yaml
 
-name: spec-iterator
-version: 0.1.0
-description: |
-  Transform rough ideas into complete technical specifications through structured
-  multi-turn clarification dialogues. Automatically identifies gaps, generates
-  targeted questions, tracks completeness, and outputs structured specs with
-  acceptance criteria.
-
-author: Jesse Henson
-license: MIT
-repository: https://github.com/JesseHenson/claude_code_apex_marketplace
-
-# Runtime configuration
-runtime:
-  type: node
-  version: "20"
-  command: node dist/index.js
-
-# Build configuration
-build:
-  install: npm install
-  command: npm run build
-
-# Environment variables (user provides their own API key)
-env:
-  ANTHROPIC_API_KEY:
-    description: Your Anthropic API key for Claude
-    required: true
-    secret: true
-
-# Pricing per tool call
-pricing:
-  model: per_call
-  rates:
-    spec_start_session: 0.02      # Analyzes requirement, generates questions
-    spec_answer_questions: 0.02   # Processes answers, generates follow-ups
-    spec_get_gaps: 0.01           # Gap analysis
-    spec_generate: 0.05           # Full spec generation
-    spec_get_status: 0.00         # Free - just returns session data
-    spec_list_sessions: 0.00      # Free - just lists sessions
-
-# Tool documentation
-tools:
-  - name: spec_start_session
-    description: Start a new clarification session from a rough requirement
-    example: |
-      Input: { "requirement": "We need a dashboard for our sales team" }
-      Output: Session ID + initial clarifying questions
-
-  - name: spec_answer_questions
-    description: Answer clarifying questions and get follow-ups
-    example: |
-      Input: { "session_id": "abc123", "answers": [{ "question_id": "q1_1", "answer": "Sales managers and reps" }] }
-      Output: Updated completeness + new questions (if needed)
-
-  - name: spec_get_gaps
-    description: Analyze what's missing in the current session
-    example: |
-      Input: { "session_id": "abc123" }
-      Output: Gap analysis with recommendations
-
-  - name: spec_generate
-    description: Generate the final specification document
-    example: |
-      Input: { "session_id": "abc123", "format": "markdown" }
-      Output: Complete structured specification
-
-  - name: spec_get_status
-    description: Check session status and pending questions
-    example: |
-      Input: { "session_id": "abc123" }
-      Output: Session details, completeness, pending questions
-
-  - name: spec_list_sessions
-    description: List all active clarification sessions
-
-# Categories for discovery
-categories:
-  - productivity
-  - development
-  - product-management
-
-# Tags for search
-tags:
-  - specification
-  - requirements
-  - clarification
-  - product
-  - prd
-  - documentation
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - ANTHROPIC_API_KEY
+    properties:
+      ANTHROPIC_API_KEY:
+        type: string
+        description: "Your Anthropic API key for Claude"
+  commandFunction: |
+    (config) => ({
+      command: 'node',
+      args: ['dist/index.js'],
+      env: {
+        ANTHROPIC_API_KEY: config.ANTHROPIC_API_KEY
+      }
+    })

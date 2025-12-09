@@ -1,0 +1,77 @@
+{
+  "defaults": {
+    "audience": "mixed",
+    "format": "markdown",
+    "completenessThreshold": 80,
+    "maxRounds": 5,
+    "questionsPerRound": 5
+  },
+  "categories": {
+    "functional": {
+      "description": "Core functionality and user-facing features",
+      "weight": 0.25
+    },
+    "technical": {
+      "description": "Architecture, APIs, infrastructure requirements",
+      "weight": 0.25
+    },
+    "ux": {
+      "description": "User experience, interactions, flows",
+      "weight": 0.15
+    },
+    "edge_case": {
+      "description": "Error handling, boundary conditions, exceptions",
+      "weight": 0.20
+    },
+    "constraint": {
+      "description": "Budget, timeline, technical limitations, compliance",
+      "weight": 0.15
+    }
+  },
+  "priorities": {
+    "critical": {
+      "description": "Must be answered before proceeding",
+      "blocking": true
+    },
+    "important": {
+      "description": "Should be answered for complete spec",
+      "blocking": false
+    },
+    "nice_to_have": {
+      "description": "Would improve spec quality",
+      "blocking": false
+    }
+  },
+  "templates": {
+    "generic": {
+      "name": "Generic Feature",
+      "description": "General purpose feature specification",
+      "focusAreas": ["functional", "technical", "ux"]
+    },
+    "api": {
+      "name": "API Endpoint",
+      "description": "REST/GraphQL API specification",
+      "focusAreas": ["technical", "constraint", "edge_case"]
+    },
+    "ui-feature": {
+      "name": "UI Component",
+      "description": "User interface component or page",
+      "focusAreas": ["ux", "functional", "edge_case"]
+    },
+    "integration": {
+      "name": "Third-party Integration",
+      "description": "Integration with external service",
+      "focusAreas": ["technical", "constraint", "edge_case"]
+    },
+    "migration": {
+      "name": "Migration",
+      "description": "Data or system migration",
+      "focusAreas": ["technical", "edge_case", "constraint"]
+    }
+  },
+  "outputs": {
+    "sessionsDir": "./outputs/sessions",
+    "specsDir": "./outputs/specs",
+    "timestampFormat": "YYYY-MM-DD-HHmmss"
+  }
+}

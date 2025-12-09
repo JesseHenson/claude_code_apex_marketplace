@@ -1,0 +1,19 @@
+{
+  "name": "spec-iterator-mcp",
+  "version": "0.1.0",
+  "description": "Multi-turn clarification plugin that transforms rough requirements into complete technical specifications with acceptance criteria, gap analysis, and completeness scoring",
+  "author": {
+    "name": "Jesse Henson",
+    "url": "https://github.com/JesseHenson"
+  },
+  "keywords": [
+    "specification",
+    "requirements",
+    "clarification",
+    "product-management",
+    "PRD",
+    "acceptance-criteria",
+    "multi-agent"
+  ],
+  "license": "MIT"
+}

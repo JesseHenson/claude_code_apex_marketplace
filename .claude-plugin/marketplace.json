@@ -10,6 +10,12 @@
       "source": "./plugins/mcp-opportunity-pipeline",
       "description": "Pipeline for discovering, validating, building, and publishing MCP servers to monetization marketplaces (Apify, Smithery, etc.)",
       "version": "0.1.0"
+    },
+    {
+      "name": "spec-iterator-mcp",
+      "source": "./plugins/spec-iterator-mcp",
+      "description": "MCP server that conducts structured multi-turn clarification dialogues to transform rough ideas into complete technical specifications with gap tracking and completeness scoring.",
+      "version": "0.1.0"
     }
   ]
 }

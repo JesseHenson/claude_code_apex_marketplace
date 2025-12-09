@@ -1,0 +1,129 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-03T15:37:28.841554Z",
+  "projects": {
+    "notion-database-sync-mcp": {
+      "slug": "notion-database-sync-mcp",
+      "displayName": "Notion Database Sync MCP",
+      "status": "active",
+      "currentPhase": "refine",
+      "currentStage": "critique-spec",
+      "files": {
+        "pre-check.md": false,
+        "draft.md": false,
+        "spec.md": true,
+        "critique.md": true,
+        "walkthrough.md": false,
+        "decisions.json": false,
+        "qa-report.json": false,
+        "build/": false,
+        "package/": false
+      },
+      "scores": {
+        "opportunityScore": 82,
+        "validationScore": 8.2,
+        "estimatedRevenue": "$500"
+      },
+      "lastDecision": {
+        "decision": "proceed",
+        "stage": "critique-spec",
+        "date": "2025-11-28T14:18:00Z",
+        "notes": "OAuth requires Notion security review (blocker). Proceed with documentation of limitations."
+      },
+      "lineage": {
+        "originProject": null,
+        "pivotedTo": [],
+        "pivotHistory": []
+      },
+      "createdAt": "2025-11-25T21:54:00Z",
+      "updatedAt": "2025-12-03T15:37:28.841076Z"
+    },
+    "airtable-advanced-mcp": {
+      "slug": "airtable-advanced-mcp",
+      "displayName": "Airtable Advanced Sync MCP",
+      "status": "active",
+      "currentPhase": "refine",
+      "currentStage": "critique-spec",
+      "files": {
+        "pre-check.md": false,
+        "draft.md": false,
+        "spec.md": true,
+        "critique.md": true,
+        "walkthrough.md": false,
+        "decisions.json": false,
+        "qa-report.json": false,
+        "build/": false,
+        "package/": false
+      },
+      "scores": {
+        "opportunityScore": 76,
+        "validationScore": 7.1,
+        "estimatedRevenue": "$300"
+      },
+      "lastDecision": {
+        "decision": "revise",
+        "stage": "critique-spec",
+        "date": "2025-11-28T14:20:00Z",
+        "notes": "Formula introspection NOT possible via API - remove from spec. Transaction rollback risky."
+      },
+      "lineage": {
+        "originProject": null,
+        "pivotedTo": [],
+        "pivotHistory": []
+      },
+      "createdAt": "2025-11-25T21:53:00Z",
+      "updatedAt": "2025-12-03T15:37:28.841076Z"
+    },
+    "linkedin-enrichment-mcp": {
+      "slug": "linkedin-enrichment-mcp",
+      "displayName": "LinkedIn Profile Enrichment MCP",
+      "status": "killed",
+      "currentPhase": "refine",
+      "currentStage": "critique-spec",
+      "files": {
+        "pre-check.md": false,
+        "draft.md": false,
+        "spec.md": true,
+        "critique.md": true,
+        "walkthrough.md": false,
+        "decisions.json": false,
+        "qa-report.json": false,
+        "build/": false,
+        "package/": false
+      },
+      "scores": {
+        "opportunityScore": 79,
+        "validationScore": 7.5,
+        "estimatedRevenue": "$500"
+      },
+      "lastDecision": {
+        "decision": "kill",
+        "stage": "critique-spec",
+        "date": "2025-11-28T14:23:00Z",
+        "notes": "CRITICAL: Proxycurl shut down July 2025 (LinkedIn lawsuit). No viable alternative at our price point."
+      },
+      "lineage": {
+        "originProject": null,
+        "pivotedTo": [],
+        "pivotHistory": []
+      },
+      "createdAt": "2025-11-25T21:56:00Z",
+      "updatedAt": "2025-12-03T15:37:28.841076Z"
+    }
+  },
+  "summary": {
+    "totalProjects": 3,
+    "byStatus": {
+      "active": 2,
+      "completed": 0,
+      "killed": 1,
+      "pivoted": 0
+    },
+    "byPhase": {
+      "ideate": 0,
+      "refine": 3,
+      "make": 0,
+      "ship": 0
+    }
+  }
+}

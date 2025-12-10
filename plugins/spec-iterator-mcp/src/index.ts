@@ -283,10 +283,15 @@ export default function createServer({ config }: { config: z.infer<typeof config
     }
   }
 
-  // Create MCP server
+  // Create MCP server with explicit capabilities
   const server = new McpServer({
     name: "spec-iterator",
-    version: "0.1.0"
+    version: "0.1.0",
+    capabilities: {
+      tools: {},
+      prompts: {},
+      resources: {}
+    }
   });
 
   // Tool: Start a new clarification session

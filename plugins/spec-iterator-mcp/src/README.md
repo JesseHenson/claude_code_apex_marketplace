@@ -1,142 +1,63 @@
-# Spec Iterator MCP Server
+# Spec Iterator
 
-Transform rough ideas into complete technical specifications through structured multi-turn clarification dialogues.
+Transform rough requirements into complete technical specifications through AI-powered clarification dialogues.
+
+## The Problem
+
+"Build a dashboard for sales" becomes 2 weeks of rework when stakeholders realize the "obvious" pipeline view is missing. Requirements arrive incomplete, ambiguous, and full of hidden assumptions.
+
+## The Solution
+
+Spec Iterator conducts structured multi-turn clarification sessions that systematically uncover gaps before you write a single line of code.
 
 ## Features
 
-- **Requirement Analysis**: Parses vague requirements and identifies gaps
-- **Clarifying Questions**: Generates targeted questions to improve spec quality
-- **Completeness Tracking**: Scores specs across functional, technical, UX, edge cases, and constraints
-- **Gap Analysis**: Shows what's missing and the impact
-- **Spec Generation**: Outputs structured specifications with acceptance criteria
+- **Intelligent Requirement Analysis** - Identifies ambiguities, missing details, and implicit assumptions
+- **Targeted Clarifying Questions** - 3-5 high-impact questions per round
+- **Completeness Scoring** - Track progress across Functional, Technical, UX, Edge Cases, and Constraints
+- **Gap Analysis** - See what's missing and understand the impact
+- **Structured Output** - Generate specs with acceptance criteria in Markdown or JSON
 
-## Installation
+## Configuration
 
-### Local Development
-
-```bash
-cd src
-npm install
-npm run build
-```
-
-### Claude Desktop
-
-Add to your `claude_desktop_config.json`:
+Requires your Anthropic API key:
 
 ```json
 {
-  "mcpServers": {
-    "spec-iterator": {
-      "command": "node",
-      "args": ["/path/to/spec-iterator-mcp/src/dist/index.js"],
-      "env": {
-        "ANTHROPIC_API_KEY": "your-api-key"
-      }
-    }
-  }
+  "ANTHROPIC_API_KEY": "sk-ant-..."
 }
 ```
-
-### Smithery Deployment
-
-1. Push to GitHub
-2. Connect repo to Smithery
-3. Deploy with `smithery.yaml` configuration
 
 ## Tools
 
-### spec_start_session
+| Tool | Description |
+|------|-------------|
+| `spec_start_session` | Start clarification from a rough requirement |
+| `spec_answer_questions` | Provide answers, get follow-up questions |
+| `spec_get_gaps` | Analyze what's missing |
+| `spec_generate` | Generate final specification |
+| `spec_get_status` | Check session status |
+| `spec_list_sessions` | List active sessions |
 
-Start a new clarification session from a rough requirement.
+## Example
 
-**Input:**
-```json
-{
-  "requirement": "We need a dashboard for our sales team",
-  "domain": "SaaS",
-  "audience": "business"
-}
+```
+Input: "We need order tracking for customers"
+
+Round 1: Who are the users? What stages? Notifications?
+Round 2: Which channels? Real-time? Returns?
+Round 3: Completeness 82% - Generate!
+
+Output: Complete spec with features, acceptance criteria, edge cases
 ```
 
-**Output:** Session ID + initial clarifying questions
+## Development
 
-### spec_answer_questions
-
-Provide answers to clarifying questions.
-
-**Input:**
-```json
-{
-  "session_id": "abc123",
-  "answers": [
-    { "question_id": "q1_1", "answer": "Sales managers and reps" },
-    { "question_id": "q1_2", "answer": "Track revenue and pipeline" }
-  ]
-}
+```bash
+npm install
+npm run dev    # Uses @smithery/cli
+npm run build  # Build for deployment
 ```
-
-**Output:** Updated completeness + follow-up questions
-
-### spec_get_gaps
-
-Analyze gaps and get recommendations.
-
-**Input:**
-```json
-{
-  "session_id": "abc123"
-}
-```
-
-**Output:** Gap analysis by category with impact and recommendations
-
-### spec_generate
-
-Generate the final specification.
-
-**Input:**
-```json
-{
-  "session_id": "abc123",
-  "format": "markdown"
-}
-```
-
-**Output:** Complete structured specification
-
-### spec_get_status
-
-Check session status and pending questions.
-
-### spec_list_sessions
-
-List all active sessions.
-
-## Pricing (Smithery)
-
-| Tool | Price per call |
-|------|----------------|
-| spec_start_session | $0.02 |
-| spec_answer_questions | $0.02 |
-| spec_get_gaps | $0.01 |
-| spec_generate | $0.05 |
-| spec_get_status | Free |
-| spec_list_sessions | Free |
-
-**Typical spec cost:** $0.10-0.20 (2-4 rounds of Q&A + generation)
-
-## How It Works
-
-1. **Start**: User provides rough requirement
-2. **Analyze**: LLM identifies gaps and generates clarifying questions
-3. **Iterate**: User answers questions, system generates follow-ups
-4. **Score**: Completeness tracked by category (functional, technical, UX, edge cases, constraints)
-5. **Generate**: When completeness reaches threshold (80%), generate full spec
-
-## Environment Variables
-
-- `ANTHROPIC_API_KEY` - Required. Your Anthropic API key.
 
 ## License
 

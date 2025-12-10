@@ -18,7 +18,7 @@ import { Session, Clarification, GeneratedSpec, GapAnalysis, CompletenessScore }
 
 // Config schema for Smithery
 export const configSchema = z.object({
-  ANTHROPIC_API_KEY: z.string().describe("Your Anthropic API key for Claude")
+  ANTHROPIC_API_KEY: z.string().describe("Required. Your Anthropic API key for Claude. Get one at console.anthropic.com. The server uses Claude to analyze requirements and generate clarifying questions.")
 });
 
 // In-memory session storage
@@ -250,17 +250,37 @@ export default function createServer({ config }: { config: z.infer<typeof config
     apiKey: config.ANTHROPIC_API_KEY
   });
 
-  // Helper to call Claude
+  // Helper to call Claude with improved error handling
   async function callClaude(systemPrompt: string, userInput: string): Promise<string> {
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userInput }]
-    });
+    try {
+      const response = await anthropic.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userInput }]
+      });
 
-    const textBlock = response.content.find(block => block.type === "text");
-    return textBlock ? textBlock.text : "";
+      const textBlock = response.content.find(block => block.type === "text");
+      return textBlock ? textBlock.text : "";
+    } catch (error) {
+      // Re-throw with actionable context for the agent
+      if (error instanceof Error) {
+        if (error.message.includes("401") || error.message.includes("authentication")) {
+          throw new Error(`API authentication failed. The configured ANTHROPIC_API_KEY may be invalid or expired. Please check your API key at console.anthropic.com and reconfigure the server.`);
+        }
+        if (error.message.includes("429") || error.message.includes("rate")) {
+          throw new Error(`API rate limit exceeded. The Anthropic API is temporarily limiting requests. Wait a few moments and try again, or check your usage at console.anthropic.com.`);
+        }
+        if (error.message.includes("500") || error.message.includes("503")) {
+          throw new Error(`Anthropic API is temporarily unavailable. This is a temporary issue on Anthropic's side. Wait a few moments and retry the operation.`);
+        }
+        if (error.message.includes("timeout") || error.message.includes("ETIMEDOUT")) {
+          throw new Error(`API request timed out. The request took too long to complete. This may be due to network issues or high API load. Try again.`);
+        }
+        throw new Error(`API call failed: ${error.message}. If this persists, check your API key configuration and Anthropic API status.`);
+      }
+      throw error;
+    }
   }
 
   // Create MCP server
@@ -272,11 +292,19 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: Start a new clarification session
   server.tool(
     "spec_start_session",
-    "Start a new spec clarification session from a rough requirement. Returns session ID and initial clarifying questions.",
+    `Start a new specification clarification session from a rough or incomplete requirement.
+
+USE THIS TOOL WHEN: You have a vague requirement like "build a dashboard" or "we need order tracking" and need to systematically uncover missing details before implementation.
+
+RETURNS: A session_id (save this!) and initial clarifying questions organized by category (functional, technical, UX, edge cases, constraints).
+
+TYPICAL WORKFLOW: spec_start_session → spec_answer_questions (repeat until 80%+ completeness) → spec_generate
+
+NEXT STEP: Use spec_answer_questions with the returned session_id and question IDs to provide answers.`,
     {
-      requirement: z.string().describe("The initial requirement or idea to clarify"),
-      domain: z.string().optional().describe("Domain context (e.g., 'e-commerce', 'healthcare', 'SaaS')"),
-      audience: z.enum(["technical", "business", "mixed"]).optional().describe("Target audience for the spec")
+      requirement: z.string().describe("Required. The initial requirement, idea, or feature request to clarify. Can be as vague as 'build a dashboard' or more detailed. The more context provided, the better the initial questions."),
+      domain: z.string().optional().describe("Optional. Domain context helps generate more relevant questions. Examples: 'e-commerce', 'healthcare', 'fintech', 'SaaS', 'mobile app'. Defaults to general software."),
+      audience: z.enum(["technical", "business", "mixed"]).optional().describe("Optional. Target audience for the final spec. 'technical' = developers, 'business' = stakeholders, 'mixed' = both. Defaults to 'mixed'.")
     },
     async ({ requirement, domain, audience }) => {
       const session = createSession(requirement, { domain, audience });
@@ -338,12 +366,16 @@ export default function createServer({ config }: { config: z.infer<typeof config
           }]
         };
       } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : String(e);
         return {
           content: [{
             type: "text" as const,
             text: JSON.stringify({
               error: "Failed to analyze requirement",
-              details: e instanceof Error ? e.message : String(e)
+              details: errorMessage,
+              recovery: errorMessage.includes("API")
+                ? "This is an API issue. Check the error details and retry."
+                : "The AI response could not be parsed. Try rephrasing your requirement or try again."
             }, null, 2)
           }],
           isError: true
@@ -355,13 +387,24 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: Answer clarifying questions
   server.tool(
     "spec_answer_questions",
-    "Provide answers to clarifying questions. Returns updated completeness and any follow-up questions.",
+    `Provide answers to clarifying questions in an active session. Each answer improves the specification completeness score.
+
+USE THIS TOOL WHEN: You have a session_id from spec_start_session and want to answer one or more pending questions.
+
+RETURNS: Updated completeness scores (0-100% overall and per category), any new follow-up questions generated based on your answers, and the next recommended action.
+
+WORKFLOW POSITION: spec_start_session → [spec_answer_questions] (you are here, repeat until 80%+) → spec_generate
+
+TIPS:
+- Answer as many questions as you can in one call for efficiency
+- Say "unknown - assume X" to document assumptions rather than guessing
+- When completeness reaches 80%+, you'll be prompted to generate the spec`,
     {
-      session_id: z.string().describe("The session ID from spec_start_session"),
+      session_id: z.string().describe("Required. The session_id returned from spec_start_session. This identifies which clarification session to update."),
       answers: z.array(z.object({
-        question_id: z.string().describe("The question ID to answer"),
-        answer: z.string().describe("Your answer to the question")
-      })).describe("Array of answers to questions")
+        question_id: z.string().describe("Required. The question ID (e.g., 'q1_1', 'q2_3') from the questions list."),
+        answer: z.string().describe("Required. Your answer to the question. Be specific. If unknown, say 'unknown - assume X' to create a documented assumption.")
+      })).describe("Required. Array of question/answer pairs. You can answer multiple questions in one call.")
     },
     async ({ session_id, answers }) => {
       const session = getSession(session_id);
@@ -369,7 +412,11 @@ export default function createServer({ config }: { config: z.infer<typeof config
         return {
           content: [{
             type: "text" as const,
-            text: JSON.stringify({ error: "Session not found", session_id })
+            text: JSON.stringify({
+              error: "Session not found",
+              session_id,
+              recovery: "The session_id may be invalid, expired, or from a previous server session. Use spec_list_sessions to see available sessions, or spec_start_session to create a new one."
+            })
           }],
           isError: true
         };
@@ -461,9 +508,17 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: Get gap analysis
   server.tool(
     "spec_get_gaps",
-    "Analyze gaps in the current session and get recommendations for improving completeness.",
+    `Analyze what's missing in a specification session and get actionable recommendations.
+
+USE THIS TOOL WHEN: You want to understand why completeness is low, identify blocking gaps before generating, or get specific recommendations for what information is still needed.
+
+RETURNS: Detailed breakdown of gaps by category (functional, technical, UX, edge cases, constraints), impact assessment for each gap, whether the spec is ready to generate, and specific blocking issues that should be resolved first.
+
+WORKFLOW POSITION: Can be called anytime after spec_start_session. Useful before spec_generate to ensure quality.
+
+WHEN TO USE vs. spec_get_status: Use spec_get_gaps for detailed analysis and recommendations. Use spec_get_status for quick progress check.`,
     {
-      session_id: z.string().describe("The session ID to analyze")
+      session_id: z.string().describe("Required. The session_id to analyze for gaps and missing information.")
     },
     async ({ session_id }) => {
       const session = getSession(session_id);
@@ -471,7 +526,11 @@ export default function createServer({ config }: { config: z.infer<typeof config
         return {
           content: [{
             type: "text" as const,
-            text: JSON.stringify({ error: "Session not found", session_id })
+            text: JSON.stringify({
+              error: "Session not found",
+              session_id,
+              recovery: "The session_id may be invalid, expired, or from a previous server session. Use spec_list_sessions to see available sessions, or spec_start_session to create a new one."
+            })
           }],
           isError: true
         };
@@ -501,13 +560,17 @@ export default function createServer({ config }: { config: z.infer<typeof config
           }]
         };
       } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : String(e);
         return {
           content: [{
             type: "text" as const,
             text: JSON.stringify({
               error: "Failed to analyze gaps",
-              details: e instanceof Error ? e.message : String(e),
-              completeness: session.completeness
+              details: errorMessage,
+              completeness: session.completeness,
+              recovery: errorMessage.includes("API")
+                ? "This is an API issue. Check the error details and retry."
+                : "The AI response could not be parsed. Try again or use spec_get_status for a simpler progress check."
             }, null, 2)
           }],
           isError: true
@@ -519,10 +582,22 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: Generate specification
   server.tool(
     "spec_generate",
-    "Generate the final structured specification from a clarification session.",
+    `Generate the final structured specification document from a completed clarification session.
+
+USE THIS TOOL WHEN: Completeness is 80%+ (or you want to generate anyway with gaps documented). This is the final step in the workflow.
+
+RETURNS: A complete specification including: problem statement with user personas, step-by-step user flows, features with acceptance criteria, edge cases with handling strategies, documented assumptions, and open questions for stakeholders.
+
+WORKFLOW POSITION: spec_start_session → spec_answer_questions (repeat) → [spec_generate] (you are here - final step)
+
+OUTPUT FORMATS:
+- 'markdown' (default): Human-readable spec ready for sharing with stakeholders
+- 'json': Structured data for programmatic processing or integration
+
+NOTE: Will warn if completeness is below 60% but will still generate. Gaps will be documented in the output.`,
     {
-      session_id: z.string().describe("The session ID to generate spec from"),
-      format: z.enum(["json", "markdown"]).optional().default("markdown").describe("Output format")
+      session_id: z.string().describe("Required. The session_id of the clarification session to compile into a specification."),
+      format: z.enum(["json", "markdown"]).optional().default("markdown").describe("Optional. Output format. 'markdown' (default) for human-readable docs, 'json' for structured data. Defaults to 'markdown'.")
     },
     async ({ session_id, format }) => {
       const session = getSession(session_id);
@@ -530,7 +605,11 @@ export default function createServer({ config }: { config: z.infer<typeof config
         return {
           content: [{
             type: "text" as const,
-            text: JSON.stringify({ error: "Session not found", session_id })
+            text: JSON.stringify({
+              error: "Session not found",
+              session_id,
+              recovery: "The session_id may be invalid, expired, or from a previous server session. Use spec_list_sessions to see available sessions, or spec_start_session to create a new one."
+            })
           }],
           isError: true
         };
@@ -578,12 +657,18 @@ export default function createServer({ config }: { config: z.infer<typeof config
           }]
         };
       } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : String(e);
         return {
           content: [{
             type: "text" as const,
             text: JSON.stringify({
               error: "Failed to generate specification",
-              details: e instanceof Error ? e.message : String(e)
+              details: errorMessage,
+              session_id,
+              completeness: session.completeness,
+              recovery: errorMessage.includes("API")
+                ? "This is an API issue. Check the error details and retry. Your session is preserved."
+                : "The AI response could not be parsed. Try again - your session progress is saved."
             }, null, 2)
           }],
           isError: true
@@ -595,9 +680,15 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: Get session status
   server.tool(
     "spec_get_status",
-    "Get the current status of a clarification session.",
+    `Get a quick status overview of a clarification session including progress and pending questions.
+
+USE THIS TOOL WHEN: You need to check progress on a session, see what questions remain, or resume work on a previous session.
+
+RETURNS: Session status (in_progress, ready_to_generate, complete), completeness scores, question counts (total/answered/pending), list of pending questions, and session metadata.
+
+WHEN TO USE vs. spec_get_gaps: Use spec_get_status for quick progress overview. Use spec_get_gaps for detailed analysis of what's missing and why.`,
     {
-      session_id: z.string().describe("The session ID to check")
+      session_id: z.string().describe("Required. The session_id to check status for.")
     },
     async ({ session_id }) => {
       const session = getSession(session_id);
@@ -605,7 +696,11 @@ export default function createServer({ config }: { config: z.infer<typeof config
         return {
           content: [{
             type: "text" as const,
-            text: JSON.stringify({ error: "Session not found", session_id })
+            text: JSON.stringify({
+              error: "Session not found",
+              session_id,
+              recovery: "The session_id may be invalid, expired, or from a previous server session. Use spec_list_sessions to see available sessions, or spec_start_session to create a new one."
+            })
           }],
           isError: true
         };
@@ -646,7 +741,13 @@ export default function createServer({ config }: { config: z.infer<typeof config
   // Tool: List all sessions
   server.tool(
     "spec_list_sessions",
-    "List all active clarification sessions.",
+    `List all clarification sessions (active and completed) stored on this server.
+
+USE THIS TOOL WHEN: You need to find a previous session to resume, want to see all work in progress, or need to retrieve a session_id you forgot.
+
+RETURNS: Array of sessions with id, requirement preview, status, completeness score, and creation timestamp.
+
+NOTE: Sessions are stored in memory and will be lost if the server restarts. For important work, generate the spec before ending your session.`,
     {},
     async () => {
       const allSessions = listSessions();
@@ -662,6 +763,58 @@ export default function createServer({ config }: { config: z.infer<typeof config
               completeness: s.completeness.overall,
               created_at: s.createdAt
             }))
+          }, null, 2)
+        }]
+      };
+    }
+  );
+
+  // Tool: Server info and health check
+  server.tool(
+    "spec_info",
+    `Get server information, health status, and configuration diagnostics.
+
+USE THIS TOOL WHEN: You want to verify the server is working correctly, check configuration status, or troubleshoot issues.
+
+RETURNS: Server version, API configuration status, active session count, and health indicators.`,
+    {},
+    async () => {
+      const allSessions = listSessions();
+      const activeSessions = allSessions.filter(s => s.status === 'in_progress');
+      const completedSessions = allSessions.filter(s => s.status === 'complete');
+
+      // Test API connectivity
+      let apiStatus = "configured";
+      let apiMessage = "Anthropic API key is configured";
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            server: {
+              name: "spec-iterator",
+              version: "0.1.0",
+              description: "Transform rough requirements into complete technical specifications through AI-powered clarification dialogues"
+            },
+            health: {
+              status: "healthy",
+              api: apiStatus,
+              api_message: apiMessage
+            },
+            statistics: {
+              total_sessions: allSessions.length,
+              active_sessions: activeSessions.length,
+              completed_sessions: completedSessions.length
+            },
+            capabilities: {
+              tools: ["spec_start_session", "spec_answer_questions", "spec_get_gaps", "spec_generate", "spec_get_status", "spec_list_sessions", "spec_info"],
+              completeness_categories: ["functional (30%)", "technical (25%)", "UX (20%)", "edge_cases (15%)", "constraints (10%)"],
+              output_formats: ["markdown", "json"]
+            },
+            usage: {
+              typical_workflow: "spec_start_session → spec_answer_questions (repeat) → spec_generate",
+              estimated_cost: "$0.05-0.15 per spec (3-5 clarification rounds)"
+            }
           }, null, 2)
         }]
       };

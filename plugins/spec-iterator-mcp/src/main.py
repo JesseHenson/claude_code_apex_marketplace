@@ -677,18 +677,20 @@ def main():
     # Get port from environment (Smithery sets PORT=8081)
     port = int(os.getenv("PORT", "8080"))
 
-    # Get the ASGI app and add CORS middleware
+    # Get the ASGI app and add CORS middleware (Smithery requirements)
     app = mcp.streamable_http_app()
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["*"],
+        expose_headers=["mcp-session-id", "mcp-protocol-version"],
+        max_age=86400,
     )
 
     print(f"> Server starting on port {port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="debug")
 
 
 if __name__ == "__main__":

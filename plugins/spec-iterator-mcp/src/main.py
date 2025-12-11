@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 from starlette.middleware.cors import CORSMiddleware
 
+from middleware import SmitheryConfigMiddleware
 from models import (
     Audience,
     Clarification,
@@ -51,15 +52,28 @@ sessions: dict[str, Session] = {}
 
 # Anthropic client (initialized lazily)
 _client: anthropic.Anthropic | None = None
+_current_api_key: str | None = None
+
+
+def set_api_key(api_key: str) -> None:
+    """Set the API key from Smithery config middleware."""
+    global _current_api_key, _client
+    if api_key and api_key != _current_api_key:
+        _current_api_key = api_key
+        _client = None  # Reset client to use new key
 
 
 def get_client() -> anthropic.Anthropic:
     """Get or create Anthropic client."""
     global _client
     if _client is None:
-        api_key = os.getenv("ANTHROPIC_API_KEY")
+        # Try Smithery config first, then env var
+        api_key = _current_api_key or os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
-            raise ValueError("ANTHROPIC_API_KEY environment variable is required")
+            raise ValueError(
+                "ANTHROPIC_API_KEY is required. "
+                "Configure it in Smithery or set as environment variable."
+            )
         _client = anthropic.Anthropic(api_key=api_key)
     return _client
 
@@ -677,8 +691,13 @@ def main():
     # Get port from environment (Smithery sets PORT=8081)
     port = int(os.getenv("PORT", "8080"))
 
-    # Get the ASGI app and add CORS middleware (Smithery requirements)
+    # Get the ASGI app and add middleware
     app = mcp.streamable_http_app()
+
+    # Add Smithery config middleware to extract API key from query params
+    app.add_middleware(SmitheryConfigMiddleware, set_api_key=set_api_key)
+
+    # Add CORS middleware (Smithery requirements)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],

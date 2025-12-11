@@ -15,7 +15,7 @@ COPY pyproject.toml ./
 RUN uv sync --no-dev --no-install-project
 
 # Copy application code
-COPY main.py prompts.py models.py ./
+COPY main.py prompts.py models.py middleware.py ./
 
 # Install the project
 RUN uv sync --no-dev

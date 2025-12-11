@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+
+# Environment
+.env
+
+# Smithery build artifacts
+.smithery/
+
+# Node (legacy)
+node_modules/
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+
+# uv
+uv.lock

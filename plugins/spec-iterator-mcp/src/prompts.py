@@ -1,8 +1,10 @@
-// LLM prompts for requirement analysis and question generation
+"""LLM prompts for requirement analysis and question generation."""
 
-import { Session, Clarification, QuestionCategory } from './types.js';
+import json
+from models import Session
 
-export const REQUIREMENT_ANALYZER_PROMPT = `You are a senior product analyst specializing in requirement decomposition.
+
+REQUIREMENT_ANALYZER_PROMPT = """You are a senior product analyst specializing in requirement decomposition.
 
 Your job is to analyze a rough requirement and generate targeted clarifying questions.
 
@@ -38,9 +40,10 @@ Return a JSON object with:
 3. Prioritize by impact on implementation
 4. Avoid yes/no questions - ask for specifics
 5. Reference concrete scenarios when possible
-6. First round should establish scope and users`;
+6. First round should establish scope and users"""
 
-export const QUESTION_GENERATOR_PROMPT = `You are a clarification specialist that generates follow-up questions based on previous answers.
+
+QUESTION_GENERATOR_PROMPT = """You are a clarification specialist that generates follow-up questions based on previous answers.
 
 ## Input
 You will receive:
@@ -68,9 +71,10 @@ Return a JSON object with:
 3. Generate 3-5 questions per round
 4. Later rounds should focus on edge cases and constraints
 5. If answers reveal new scope, ask about it
-6. Stop if all categories are above 80%`;
+6. Stop if all categories are above 80%"""
 
-export const GAP_ANALYZER_PROMPT = `You are a requirements gap analyzer.
+
+GAP_ANALYZER_PROMPT = """You are a requirements gap analyzer.
 
 ## Input
 You will receive a session with requirement, clarifications, and completeness scores.
@@ -94,9 +98,10 @@ Return a JSON object with:
 1. Focus on gaps that would cause implementation confusion
 2. Mark as ready_to_generate if overall completeness >= 75%
 3. Suggest assumptions for non-critical gaps
-4. Be specific about what information is missing`;
+4. Be specific about what information is missing"""
 
-export const SPEC_COMPILER_PROMPT = `You are a specification compiler that transforms clarified requirements into structured specs.
+
+SPEC_COMPILER_PROMPT = """You are a specification compiler that transforms clarified requirements into structured specs.
 
 ## Input
 You will receive a session with:
@@ -108,12 +113,12 @@ You will receive a session with:
 Return a JSON object with:
 {
   "title": "Spec title",
-  "problemStatement": {
+  "problem_statement": {
     "pain": "The core problem",
     "who": "Who experiences it",
-    "currentWorkarounds": ["How they cope today"]
+    "current_workarounds": ["How they cope today"]
   },
-  "userFlow": [
+  "user_flow": [
     {
       "step": 1,
       "actor": "Who",
@@ -125,18 +130,18 @@ Return a JSON object with:
     {
       "name": "Feature name",
       "description": "What it does",
-      "acceptanceCriteria": ["Testable criteria"],
+      "acceptance_criteria": ["Testable criteria"],
       "priority": "mvp|v2|future"
     }
   ],
-  "edgeCases": [
+  "edge_cases": [
     {
       "scenario": "What could go wrong",
       "handling": "How to handle it"
     }
   ],
   "assumptions": ["Things assumed for this spec"],
-  "openQuestions": ["Things still to resolve"]
+  "open_questions": ["Things still to resolve"]
 }
 
 ## Rules
@@ -145,44 +150,61 @@ Return a JSON object with:
 3. Document all assumptions explicitly
 4. Include edge cases mentioned in clarifications
 5. Keep language clear and actionable
-6. Prioritize ruthlessly - MVP should be buildable in 2-4 weeks`;
+6. Prioritize ruthlessly - MVP should be buildable in 2-4 weeks"""
 
-export function buildAnalyzerInput(requirement: string, context?: { domain?: string; audience?: string }): string {
-  return JSON.stringify({
-    requirement,
-    context: context || {}
-  });
-}
 
-export function buildQuestionGeneratorInput(session: Session): string {
-  return JSON.stringify({
-    requirement: session.requirement,
-    context: session.context,
-    clarifications: session.clarifications.map(c => ({
-      question: c.question,
-      answer: c.answer,
-      category: c.category
-    })),
-    completeness: session.completeness,
-    roundCount: session.roundCount
-  });
-}
+def build_analyzer_input(requirement: str, domain: str | None = None, audience: str | None = None) -> str:
+    """Build input for requirement analyzer."""
+    return json.dumps({
+        "requirement": requirement,
+        "context": {
+            "domain": domain,
+            "audience": audience
+        }
+    })
 
-export function buildGapAnalyzerInput(session: Session): string {
-  return JSON.stringify({
-    requirement: session.requirement,
-    clarifications: session.clarifications,
-    completeness: session.completeness,
-    assumptions: session.assumptions
-  });
-}
 
-export function buildSpecCompilerInput(session: Session): string {
-  return JSON.stringify({
-    requirement: session.requirement,
-    context: session.context,
-    clarifications: session.clarifications.filter(c => c.answer !== null),
-    assumptions: session.assumptions,
-    completeness: session.completeness
-  });
-}
+def build_question_generator_input(session: Session) -> str:
+    """Build input for follow-up question generator."""
+    return json.dumps({
+        "requirement": session.requirement,
+        "context": {
+            "domain": session.context.domain,
+            "audience": session.context.audience.value if session.context.audience else None
+        },
+        "clarifications": [
+            {
+                "question": c.question,
+                "answer": c.answer,
+                "category": c.category.value
+            }
+            for c in session.clarifications
+        ],
+        "completeness": session.completeness.model_dump(),
+        "round_count": session.round_count
+    })
+
+
+def build_gap_analyzer_input(session: Session) -> str:
+    """Build input for gap analyzer."""
+    return json.dumps({
+        "requirement": session.requirement,
+        "clarifications": [c.model_dump() for c in session.clarifications],
+        "completeness": session.completeness.model_dump(),
+        "assumptions": session.assumptions
+    }, default=str)
+
+
+def build_spec_compiler_input(session: Session) -> str:
+    """Build input for spec compiler."""
+    answered = [c for c in session.clarifications if c.answer is not None]
+    return json.dumps({
+        "requirement": session.requirement,
+        "context": {
+            "domain": session.context.domain,
+            "audience": session.context.audience.value if session.context.audience else None
+        },
+        "clarifications": [c.model_dump() for c in answered],
+        "assumptions": session.assumptions,
+        "completeness": session.completeness.model_dump()
+    }, default=str)
